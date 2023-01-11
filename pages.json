@@ -29,6 +29,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/ranking/ranking",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationStyle": "custom"

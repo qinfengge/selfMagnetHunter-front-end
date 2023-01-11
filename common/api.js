@@ -8,21 +8,21 @@ let time = Date.now()
 
 export function indexList(page, magnetType) {
 	return uni.request({
-		url: `${baseUrl}/index/${page}/${magnetType}`,
+		url: `${baseUrl}/rss/index/${page}/${magnetType}`,
 		method: 'GET'
 	});
 }
 
 export function detail(id) {
 	return uni.request({
-		url: `${baseUrl}/detail/${id}`,
+		url: `${baseUrl}/rss/detail/${id}`,
 		method: 'GET'
 	});
 }
 
 export function getStarsDetail(data) {
 	return uni.request({
-		url: `${baseUrl}/starsDetail`,
+		url: `${baseUrl}/rss/starsDetail`,
 		method: 'POST',
 		data:data
 	});
@@ -30,14 +30,21 @@ export function getStarsDetail(data) {
 
 export function starSearch(page, id) {
 	return uni.request({
-		url: `${baseUrl}/starSearch/${page}/${id}`,
+		url: `${baseUrl}/rss/starSearch/${page}/${id}`,
 		method: 'GET',
 	});
 }
 
 export function search(page, keyword) {
 	return uni.request({
-		url: `${baseUrl}/search/${page}/${keyword}`,
+		url: `${baseUrl}/rss/search/${page}/${keyword}`,
+		method: 'GET',
+	});
+}
+
+export function ranking(type) {
+	return uni.request({
+		url: `${baseUrl}/ranking/ranking/${type}`,
 		method: 'GET',
 	});
 }
