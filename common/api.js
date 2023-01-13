@@ -48,3 +48,18 @@ export function ranking(type) {
 		method: 'GET',
 	});
 }
+
+export function listAria2() {
+	return uni.request({
+		url: `${baseUrl}/aria2/list`,
+		method: 'GET',
+	});
+}
+
+export function addAria2(data) {
+	return uni.request({
+		url: `${baseUrl}/aria2/add`,
+		method: 'POST',
+		data:data
+	});
+}

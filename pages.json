@@ -38,6 +38,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/download/download",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationStyle": "custom"
@@ -60,7 +69,13 @@
 	                "text":"排行榜",
 	                "iconPath":"static/tabbar/排行榜.png",
 	                "selectedIconPath":"static/tabbar/排行榜-check.png"
-	            }
+	            },
+				{
+				    "pagePath":"pages/download/download",
+				    "text":"下载",
+				    "iconPath":"static/tabbar/下载.png",
+				    "selectedIconPath":"static/tabbar/下载-check.png"
+				}
 	        ]
 	    }
 	
