@@ -63,3 +63,10 @@ export function addAria2(data) {
 		data:data
 	});
 }
+
+export function setDefaultAria2(id) {
+	return uni.request({
+		url: `${baseUrl}/aria2/setDefault/${id}`,
+		method: 'PUT',
+	});
+}
