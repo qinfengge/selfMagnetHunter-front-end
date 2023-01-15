@@ -31,28 +31,28 @@ export function getStarsDetail(data) {
 export function starSearch(page, id) {
 	return uni.request({
 		url: `${baseUrl}/rss/starSearch/${page}/${id}`,
-		method: 'GET',
+		method: 'GET'
 	});
 }
 
 export function search(page, keyword) {
 	return uni.request({
 		url: `${baseUrl}/rss/search/${page}/${keyword}`,
-		method: 'GET',
+		method: 'GET'
 	});
 }
 
 export function ranking(type) {
 	return uni.request({
 		url: `${baseUrl}/ranking/ranking/${type}`,
-		method: 'GET',
+		method: 'GET'
 	});
 }
 
 export function listAria2() {
 	return uni.request({
 		url: `${baseUrl}/aria2/list`,
-		method: 'GET',
+		method: 'GET'
 	});
 }
 
@@ -67,6 +67,21 @@ export function addAria2(data) {
 export function setDefaultAria2(id) {
 	return uni.request({
 		url: `${baseUrl}/aria2/setDefault/${id}`,
-		method: 'PUT',
+		method: 'PUT'
+	});
+}
+
+export function getSeqAria2s() {
+	return uni.request({
+		url: `${baseUrl}/aria2/seqList`,
+		method: 'GET'
+	});
+}
+
+export function sendMagnet(id, data) {
+	return uni.request({
+		url: `${baseUrl}/aria2/send/${id}`,
+		method: 'POST',
+		data:data
 	});
 }

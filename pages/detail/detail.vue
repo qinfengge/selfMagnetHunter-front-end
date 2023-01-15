@@ -19,6 +19,26 @@
 				</n-gi>
 			</n-grid>
 		</view>
+
+		<view class="down-btn">
+			<n-button type="primary" @click="handleToDownload">
+				直接下载
+			</n-button>
+			<n-button type="info" @click="handleToPreDown">
+				预下载
+			</n-button>
+			
+			<view class="down">
+				<n-drawer v-model:show="down" placement="bottom" >
+				    <n-drawer-content title="选择下载器" closable>
+						<n-select @update:value="handleUpdateValue" :options="options" />
+				      <template #footer>
+				        <n-button @click="downMagnet">提交</n-button>
+				      </template>
+				    </n-drawer-content>
+				  </n-drawer>
+			</view>
+		</view>
 		<view class="tags">
 			<view v-for="(item,index) in tags" :key="index">
 				<n-tag type="info" style="margin-left: 10px; margin-top: 10px;">
@@ -46,7 +66,8 @@
 					<n-space class="sam-space" v-for="(item,index) in samples" :key="index"
 						style="display: inline-block;">
 						<!-- <n-image class="sam-image" width="300" height="175" :src="item.src" object-fit="cover" lazy referrerPolicy="no-referrer"/> -->
-						<img class="sam-image"  :src="item.src" style="width: 300px; height: 175px; object-fit: cover;" referrerPolicy="no-referrer" />
+						<img class="sam-image" :src="item.src" style="width: 300px; height: 175px; object-fit: cover;"
+							referrerPolicy="no-referrer" />
 					</n-space>
 				</n-image-group>
 			</scroll-view>
@@ -66,7 +87,7 @@
 
 					<template #action>
 						<view class="magnet-action">
-							<n-button circle quaternary >
+							<n-button circle quaternary>
 								<n-icon size="25" color="#0e7a0d">
 									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 										viewBox="0 0 24 24">
@@ -79,11 +100,12 @@
 									</svg>
 								</n-icon>
 							</n-button>
-							<n-button circle quaternary >
+							<n-button circle quaternary>
 								<n-icon size="25" color="#0e7a0d">
 									<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
 										viewBox="0 0 24 24">
-										<path opacity=".3" d="M3 17h18V5H3v12zM9 7l7 4l-7 4V7z" fill="currentColor"></path>
+										<path opacity=".3" d="M3 17h18V5H3v12zM9 7l7 4l-7 4V7z" fill="currentColor">
+										</path>
 										<path
 											d="M9 7v8l7-4zm12-4H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 14H3V5h18v12z"
 											fill="currentColor"></path>
@@ -95,8 +117,8 @@
 				</n-card>
 			</view>
 		</view>
-		
-		
+
+
 	</view>
 </template>
 
@@ -115,10 +137,15 @@
 		NSpace,
 		NButton,
 		NIcon,
+		NDrawer,
+		NDrawerContent,
+		NSelect
 	} from 'naive-ui'
 	import {
 		detail,
-		getStarsDetail
+		getStarsDetail,
+		getSeqAria2s,
+		sendMagnet
 	} from '../../common/api.js'
 	export default defineComponent({
 		components: {
@@ -132,6 +159,9 @@
 			NSpace,
 			NButton,
 			NIcon,
+			NDrawer,
+			NDrawerContent,
+			NSelect
 		},
 		data() {
 			return {
@@ -147,7 +177,11 @@
 				stars: [],
 				magnets: [],
 				samples: [],
-				starsDetail: []
+				starsDetail: [],
+				options: [],
+				opValue: '',
+				down: false,
+				downPre: false
 			}
 		},
 
@@ -185,11 +219,45 @@
 					this.starsDetail = res.data.data
 				})
 			},
-			
+
 			handleToStarsDetail(starId) {
 				uni.navigateTo({
 					url: '/pages/star/star?starId=' + starId
 				})
+			},
+
+			handleToDownload() {
+				this.down = true
+				getSeqAria2s().then(res =>{
+					const seq = res.data.data
+					this.options = seq.map(({ id, name }) => ({ label: name, value: id }));
+				})
+			},
+			
+			downMagnet(){
+				sendMagnet(this.opValue, this.magnets[0]).then(res =>{
+					if(res.code == 200){
+						this.down = false;
+						uni.showToast({
+							title: "推送成功！",
+							duration: 2000,
+						});
+					}else{
+						uni.showToast({
+							icon:'error',
+							title: "推送错误",
+							duration: 2000,
+						});
+					}
+				})
+			},
+			
+			handleUpdateValue(value, option){
+				this.opValue = value
+			},
+
+			handleToPreDown() {
+
 			}
 		}
 	})
@@ -200,13 +268,15 @@
 		width: 100%;
 		height: 80%;
 	}
-	
-	.title{
+
+	.title {
 		margin-left: 15px;
 	}
-	.grid-info{
+
+	.grid-info {
 		margin-left: 20px;
 	}
+
 	.tags {
 		margin-top: 25px;
 		display: flex;
@@ -264,8 +334,8 @@
 	.sam-space {
 		margin-right: 15px;
 	}
-	
-	.magnet{
+
+	.magnet {
 		margin-top: 25px;
 	}
 
@@ -293,11 +363,17 @@
 		/* 溢出部分用省略号代替 */
 		text-overflow: ellipsis;
 	}
-	
-	.magnet-action{
+
+	.magnet-action {
 		width: 100px;
 		display: flex;
 		flex-direction: row;
 		justify-content: space-around;
+	}
+
+	.down-btn {
+		display: flex;
+		justify-content: space-around;
+		margin-top: 20px;
 	}
 </style>
